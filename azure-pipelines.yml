@@ -34,9 +34,8 @@ stages:
 
     - script: |
         python -m pip install --upgrade pip
-        pip install azure-cli
-        python -m pip install distutils
-      displayName: 'Install Azure CLI and distutils'
+        pip install azure-cli==2.61.0  # Ensure specific version to avoid compatibility issues
+      displayName: 'Install Azure CLI'
 
     - task: AzureCLI@2
       inputs:
@@ -51,8 +50,7 @@ stages:
         terraformVersion: '1.0.7'
 
     - script: |
-        terraform init
-      workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+        terraform init $(System.DefaultWorkingDirectory)/terraform
       displayName: 'Terraform Init'
 
     - script: |
@@ -64,8 +62,8 @@ stages:
                        -var "mysql_server_name=$(mysqlServerName)" \
                        -var "mysql_admin_username=$(mysqlAdminUsername)" \
                        -var "mysql_admin_password=$(mysqlAdminPassword)" \
-                       -var "docker_images=$(dockerImages)"
-      workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+                       -var "docker_images=$(dockerImages)" \
+                       $(System.DefaultWorkingDirectory)/terraform
       displayName: 'Terraform Plan'
 
     - script: |
@@ -77,6 +75,6 @@ stages:
                                         -var "mysql_server_name=$(mysqlServerName)" \
                                         -var "mysql_admin_username=$(mysqlAdminUsername)" \
                                         -var "mysql_admin_password=$(mysqlAdminPassword)" \
-                                        -var "docker_images=$(dockerImages)"
-      workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+                                        -var "docker_images=$(dockerImages)" \
+                                        $(System.DefaultWorkingDirectory)/terraform
       displayName: 'Terraform Apply'
