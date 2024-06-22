@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  azureServiceConnection: 'lnePritishServiceConnection'
+  azureServiceConnection: 'lneArmServiceConnection'
   resourceGroupName: 'lne-PritishRG'
   location: 'Central India'
   acrName: 'lneacr'
